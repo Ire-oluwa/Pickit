@@ -14,6 +14,9 @@ class PickerViewModel extends GetxController {
   void onInit() {
     super.onInit();
     loadSelectedMedia();
+    // videoPlayerController.play();
+    // _getVideoFromCamera();
+    // _getVideoFromGallery();
   }
 
   RxList<XFile?> pickedMedia = <XFile?>[].obs;
@@ -111,6 +114,10 @@ class PickerViewModel extends GetxController {
     if (pickedFile != null) {
       pickedMedia.add(pickedFile);
       videoPlayerController = VideoPlayerController.file(galleryVideo)
+        ..addListener(() {
+          update();
+        })
+        ..setLooping(false)
         ..initialize().then((value) {
           videoPlayerController.play();
           // update();

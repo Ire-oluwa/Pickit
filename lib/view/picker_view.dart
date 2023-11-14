@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pickit/components/my_elevated_button.dart';
+import 'package:pickit/constants/colours.dart';
 import 'package:pickit/constants/strings.dart';
 import 'package:pickit/view/picker_view_model.dart';
 import 'package:video_player/video_player.dart';
@@ -94,7 +95,10 @@ class _PickerViewState extends State<PickerView> {
       },
       onLongPress: () => ctrl.deleteSelectedImage(index),
       child: Container(
-        color: Colors.grey,
+        decoration: BoxDecoration(
+          color: Colours.mediaBackground,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
         child: Image.file(
           File(mediaFile?.path ?? ""),
         ),
