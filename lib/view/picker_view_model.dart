@@ -20,6 +20,8 @@ class PickerViewModel extends GetxController {
   }
 
   RxList<XFile?> pickedMedia = <XFile?>[].obs;
+
+  // RxList<MediaFile?> pickedMedia = <MediaFile?>[].obs;
   RxString mediaType = Strings.image.obs;
   late File cameraImage;
   late File galleryImage;
@@ -71,7 +73,9 @@ class PickerViewModel extends GetxController {
     File image = File(pickedFile?.path ?? "");
     cameraImage = image;
     if (pickedFile != null) {
-      pickedMedia.add(pickedFile);
+      // MediaFile mediaFile = MediaFile(pickedFile, Strings.image);
+      final mediaFile = XFile(pickedFile.path);
+      pickedMedia.add(mediaFile);
       saveSelectedMedia();
       mediaType.value = Strings.image;
       update();
@@ -83,7 +87,9 @@ class PickerViewModel extends GetxController {
     File image = File(pickedFile?.path ?? "");
     galleryImage = image;
     if (pickedFile != null) {
-      pickedMedia.add(pickedFile);
+      // MediaFile mediaFile = MediaFile(pickedFile, Strings.image);
+      final mediaFile = XFile(pickedFile.path);
+      pickedMedia.add(mediaFile);
       saveSelectedMedia();
       mediaType.value = Strings.image;
       update();
@@ -95,7 +101,9 @@ class PickerViewModel extends GetxController {
     File video = File(pickedFile?.path ?? "");
     cameraVideo = video;
     if (pickedFile != null) {
-      pickedMedia.add(pickedFile);
+      // MediaFile mediaFile = MediaFile(pickedFile, Strings.video);
+      final mediaFile = XFile(pickedFile.path);
+      pickedMedia.add(mediaFile);
       videoPlayerController =
           VideoPlayerController.file(cameraVideo ?? File(""))
             ..initialize().then((value) {
@@ -112,7 +120,9 @@ class PickerViewModel extends GetxController {
     File video = File(pickedFile?.path ?? "");
     galleryVideo = video;
     if (pickedFile != null) {
-      pickedMedia.add(pickedFile);
+      // MediaFile mediaFile = MediaFile(pickedFile, Strings.video);
+      final mediaFile = XFile(pickedFile.path);
+      pickedMedia.add(mediaFile);
       videoPlayerController = VideoPlayerController.file(galleryVideo)
         ..addListener(() {
           update();
@@ -130,6 +140,7 @@ class PickerViewModel extends GetxController {
 
   Future<void> saveSelectedMedia() async {
     final prefs = await SharedPreferences.getInstance();
+    // final mediaPaths = pickedMedia.map((file) => file?.xFile.path).toList();
     final mediaPaths = pickedMedia.map((file) => file?.path).toList();
     prefs.setString(Strings.selectedMedia, jsonEncode(mediaPaths));
     update();
@@ -154,3 +165,18 @@ class PickerViewModel extends GetxController {
     }
   }
 }
+
+// class MediaFile {
+//   XFile xFile;
+//   String mediaType;
+//
+//   MediaFile(this.xFile, this.mediaType);
+//
+//   Map<String, dynamic> toJson(MediaFile instance) =>
+//       <String, dynamic>{
+//   "xFile": instance.xFile,
+//   "mediaType": instance.mediaType,
+//   };
+// }
+
+

@@ -23,6 +23,26 @@ class _PickerViewState extends State<PickerView> {
     super.initState();
   }
 
+  bool isVideoFile(String filePath) {
+    // Get the file extension
+    String extension = filePath.split('.').last.toLowerCase();
+
+    // Check if the extension corresponds to a video format
+    return [
+      'mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', // Add more video extensions if needed
+    ].contains(extension);
+  }
+
+  bool isImageFile(String filePath) {
+    // Get the file extension
+    String extension = filePath.split('.').last.toLowerCase();
+
+    // Check if the extension corresponds to an image format
+    return [
+      'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', // Add more image extensions if needed
+    ].contains(extension);
+  }
+
   final PickerViewModel ctrl = Get.put(PickerViewModel());
 
   @override
@@ -76,12 +96,11 @@ class _PickerViewState extends State<PickerView> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: ctrl.pickedMedia.length,
         itemBuilder: (context, index) {
-          // final mediaFile = ctrl.pickedMedia[index];
-          return ctrl.mediaType.value == Strings.image
-              ? _image(index)
-              : ctrl.mediaType.value == Strings.video
-                  ? _video(index)
-                  : null;
+          final mediaFile = ctrl.pickedMedia[index];
+          // return mediaFile?.mediaType == Strings.image
+          return isImageFile(ctrl.pickedMedia[index]!.path) ? _image(index)
+              : _video(index);
+
         },
       ),
     );
@@ -101,6 +120,7 @@ class _PickerViewState extends State<PickerView> {
         ),
         child: Image.file(
           File(mediaFile?.path ?? ""),
+          // File(mediaFile?.xFile.path ?? ""),
         ),
       ),
     );

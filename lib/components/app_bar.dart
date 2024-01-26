@@ -17,7 +17,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      actions: [],
+      actions: const [],
       backgroundColor: Colours.appBar,
       centerTitle: Platform.isIOS ? true : false,
       elevation: 0.0,
