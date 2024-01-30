@@ -27,7 +27,7 @@ class PickerViewModel extends GetxController {
   late File galleryImage;
   File? cameraVideo;
   late File galleryVideo;
-  late VideoPlayerController videoPlayerController;
+  VideoPlayerController? videoPlayerController;
   final picker = ImagePicker();
 
   Future<void> showOptions(context) async {
@@ -107,7 +107,7 @@ class PickerViewModel extends GetxController {
       videoPlayerController =
           VideoPlayerController.file(cameraVideo ?? File(""))
             ..initialize().then((value) {
-              videoPlayerController.play();
+              videoPlayerController?.play();
               saveSelectedMedia();
               mediaType.value = Strings.video;
               update();
@@ -129,7 +129,7 @@ class PickerViewModel extends GetxController {
         })
         ..setLooping(false)
         ..initialize().then((value) {
-          videoPlayerController.play();
+          videoPlayerController?.play();
           // update();
           saveSelectedMedia();
           mediaType.value = Strings.video;
@@ -164,7 +164,27 @@ class PickerViewModel extends GetxController {
       update();
     }
   }
+
+  String? getImagePath(int index){
+    if (index >= 0 && index < pickedMedia.length){
+      return pickedMedia[index]?.path;
+    } else {
+      return null;
+    }
+  }
+
+  bool imageFileExists(int index){
+    if (index  >= 0 && index < pickedMedia.length) {
+      return File(pickedMedia[index]?.path ?? "").existsSync();
+    } else {
+      return false;
+    }
+  }
+
 }
+
+
+
 
 // class MediaFile {
 //   XFile xFile;

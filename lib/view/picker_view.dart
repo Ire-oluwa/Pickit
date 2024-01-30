@@ -29,7 +29,14 @@ class _PickerViewState extends State<PickerView> {
 
     // Check if the extension corresponds to a video format
     return [
-      'mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', // Add more video extensions if needed
+      'mp4',
+      'avi',
+      'mkv',
+      'mov',
+      'wmv',
+      'flv',
+      'webm',
+      // Add more video extensions if needed
     ].contains(extension);
   }
 
@@ -39,7 +46,13 @@ class _PickerViewState extends State<PickerView> {
 
     // Check if the extension corresponds to an image format
     return [
-      'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', // Add more image extensions if needed
+      'jpg',
+      'jpeg',
+      'png',
+      'gif',
+      'bmp',
+      'webp',
+      // Add more image extensions if needed
     ].contains(extension);
   }
 
@@ -98,9 +111,9 @@ class _PickerViewState extends State<PickerView> {
         itemBuilder: (context, index) {
           final mediaFile = ctrl.pickedMedia[index];
           // return mediaFile?.mediaType == Strings.image
-          return isImageFile(ctrl.pickedMedia[index]!.path) ? _image(index)
+          return mediaFile != null && isImageFile(ctrl.pickedMedia[index]!.path)
+              ? _image(index)
               : _video(index);
-
         },
       ),
     );
@@ -108,6 +121,38 @@ class _PickerViewState extends State<PickerView> {
 
   Widget _image(index) {
     final mediaFile = ctrl.pickedMedia[index];
+    String? imagePath = ctrl.getImagePath(index);
+    if (imagePath == null) {
+      return Container(
+        height: 50.h,
+        width: 50.w,
+        color: Colours.mediaBackground,
+        child: GestureDetector(
+          onTap: ()=> log("jdwudw"),
+          onLongPress: () => ctrl.deleteSelectedImage(index),
+          child: const Center(
+            child: Text(Strings.imageNotFound),
+          ),
+        ),
+      );
+    }
+
+    File imageFile = File(imagePath);
+    if (!imageFile.existsSync()) {
+      return GestureDetector(
+        onTap: ()=> log("jdwudw"),
+        onLongPress: () => ctrl.deleteSelectedImage(index),
+        child: Container(
+          height: 50.h,
+          width: 50.w,
+          color: Colours.mediaBackground,
+          child: const Center(
+            child: Text(Strings.imageNotFound),
+          ),
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: () {
         log("Image ${index + 1}");
@@ -129,9 +174,19 @@ class _PickerViewState extends State<PickerView> {
   Widget _video(index) {
     return GestureDetector(
       onLongPress: () => ctrl.deleteSelectedImage(index),
+      onTap: ()=> ctrl.videoPlayerController != null ?VideoPlayer(ctrl.videoPlayerController!) : log("There' no video"),
       child: AspectRatio(
-        aspectRatio: ctrl.videoPlayerController.value.aspectRatio,
-        child: VideoPlayer(ctrl.videoPlayerController),
+        aspectRatio: ctrl.videoPlayerController?.value.aspectRatio ?? 16 / 9,
+        child: ctrl.videoPlayerController != null
+            ? VideoPlayer(ctrl.videoPlayerController!)
+            : Container(
+                height: 50.h,
+                width: 50.w,
+                color: Colours.mediaBackground,
+                child: const Center(
+                  child: Text(Strings.videoNotFound),
+                ),
+              ),
       ),
     );
   }

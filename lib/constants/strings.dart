@@ -9,4 +9,6 @@ class Strings {
   static const selectVideoFromGallery = "Gallery Video";
   static const noMediaSelected = "No Picture or Video has been uploaded!";
   static const video = "video";
+  static const imageNotFound = "Image not found";
+  static const videoNotFound = "Video not found";
 }
